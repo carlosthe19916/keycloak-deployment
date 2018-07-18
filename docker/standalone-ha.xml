@@ -9,10 +9,8 @@
         <extension module="org.jboss.as.ee"/>
         <extension module="org.jboss.as.ejb3"/>
         <extension module="org.jboss.as.jaxrs"/>
-        <extension module="org.jboss.as.jdr"/>
         <extension module="org.jboss.as.jmx"/>
         <extension module="org.jboss.as.jpa"/>
-        <extension module="org.jboss.as.jsf"/>
         <extension module="org.jboss.as.logging"/>
         <extension module="org.jboss.as.mail"/>
         <extension module="org.jboss.as.modcluster"/>
@@ -233,6 +231,8 @@
                 <distributed-cache name="offlineSessions" mode="SYNC" owners="2">
                   <partition-handling enabled="true"/>
                 </distributed-cache>
+                <distributed-cache name="clientSessions" mode="SYNC" owners="1"/>
+                <distributed-cache name="offlineClientSessions" mode="SYNC" owners="1"/>
                 <distributed-cache name="loginFailures" mode="SYNC" owners="2">
                   <partition-handling enabled="true"/>
                 </distributed-cache>
@@ -305,7 +305,6 @@
             </default-workmanager>
             <cached-connection-manager/>
         </subsystem>
-        <subsystem xmlns="urn:jboss:domain:jdr:1.0"/>
         <subsystem xmlns="urn:jboss:domain:jgroups:5.0">
           <!-- Added and modified by openshift.io keycloak team -->
             <channels default="kubernetes">
@@ -352,7 +351,6 @@
         <subsystem xmlns="urn:jboss:domain:jpa:1.1">
             <jpa default-datasource="" default-extended-persistence-inheritance="DEEP"/>
         </subsystem>
-        <subsystem xmlns="urn:jboss:domain:jsf:1.0"/>
         <subsystem xmlns="urn:jboss:domain:mail:3.0">
             <mail-session name="default" jndi-name="java:jboss/mail/Default">
                 <smtp-server outbound-socket-binding-ref="mail-smtp"/>
@@ -534,8 +532,6 @@
                 <!--   xxxxxxxxxxxxxxxxxxxxxxxxx   -->
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
-                    <filter-ref name="server-header"/>
-                    <filter-ref name="x-powered-by-header"/>
                     <http-invoker security-realm="ApplicationRealm"/>
                 </host>
                 <!-- Added by openshift.io keycloak team -->
@@ -551,10 +547,6 @@
             <handlers>
                 <file name="welcome-content" path="${jboss.home.dir}/welcome-content"/>
             </handlers>
-            <filters>
-                <response-header name="server-header" header-name="Server" header-value="WildFly/11"/>
-                <response-header name="x-powered-by-header" header-name="X-Powered-By" header-value="Undertow/1"/>
-            </filters>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:keycloak-server:1.1">
             <web-context>auth</web-context>
@@ -619,6 +611,10 @@
                         <property name="minTimeBetweenRequests" value="10"/>
                     </properties>
                 </provider>
+            </spi>
+            <spi name="x509cert-lookup">
+                <default-provider>${keycloak.x509cert.lookup.provider:default}</default-provider>
+                <provider name="default" enabled="true"/>
             </spi>
         </subsystem>
     </profile>
