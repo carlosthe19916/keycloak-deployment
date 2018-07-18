@@ -1,7 +1,7 @@
 @Library('github.com/fabric8io/fabric8-pipeline-library@master')
 def utils = new io.fabric8.Utils()
-def keycloakVersion = '3.2.1.Final'
-def branchName = '3.2.1.Final-patch'
+def keycloakVersion = '3.3.0.Final'
+def branchName = '3.3.0.Final-patch'
 
 node{
     properties([
