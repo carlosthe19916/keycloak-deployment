@@ -8,8 +8,8 @@ services:
   - docker
 
 before_script:
-- curl -O https://downloads.jboss.org/keycloak/3.2.0.Final/keycloak-3.2.0.Final.tar.gz
-- mv keycloak-3.2.0.Final.tar.gz ./docker
+- curl -O https://downloads.jboss.org/keycloak/3.2.1.Final/keycloak-3.2.1.Final.tar.gz
+- mv keycloak-3.2.1.Final.tar.gz ./docker
 
 script:
 - docker build -t docker.io/carlosthe19916/keycloak-postgres:latest -f ./docker/Dockerfile ./docker && docker build --build-arg OPERATING_MODE=clustered -t carlosthe19916/keycloak-postgres-ha:latest -f ./docker/Dockerfile ./docker
