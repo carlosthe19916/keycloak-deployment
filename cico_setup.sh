@@ -11,8 +11,8 @@ PROJECT_NAME="keycloak"
 DOCKER_IMAGE_CORE=$PROJECT_NAME
 DOCKER_IMAGE_DEPLOY=$PROJECT_NAME-deploy
 
-KEYCLOAK_VERSION="4.1.0.Final"
-BRANCH_NAME="4.1.0.Final-patch"
+KEYCLOAK_VERSION="3.4.3.Final"
+BRANCH_NAME="3.4.3.Final-patch"
 
 # Source environment variables of the jenkins slave
 # that might interest this worker.
