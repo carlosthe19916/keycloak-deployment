@@ -39,15 +39,15 @@ USER jboss
 
 ADD docker-entrypoint.sh /opt/jboss/
 
-ADD setLogLevel.xsl $KEYCLOAK_HOME
-RUN java -jar /usr/share/java/saxon.jar -s:$KEYCLOAK_HOME/standalone/configuration/standalone.xml -xsl:$KEYCLOAK_HOME/setLogLevel.xsl -o:$KEYCLOAK_HOME/standalone/configuration/standalone.xml && \
-    java -jar /usr/share/java/saxon.jar -s:$KEYCLOAK_HOME/standalone/configuration/standalone-ha.xml -xsl:$KEYCLOAK_HOME/setLogLevel.xsl -o:$KEYCLOAK_HOME/standalone/configuration/standalone-ha.xml && \
-    rm $KEYCLOAK_HOME/setLogLevel.xsl
+#ADD setLogLevel.xsl $KEYCLOAK_HOME
+#RUN java -jar /usr/share/java/saxon.jar -s:$KEYCLOAK_HOME/standalone/configuration/standalone.xml -xsl:$KEYCLOAK_HOME/setLogLevel.xsl -o:$KEYCLOAK_HOME/standalone/configuration/standalone.xml && \
+#    java -jar /usr/share/java/saxon.jar -s:$KEYCLOAK_HOME/standalone/configuration/standalone-ha.xml -xsl:$KEYCLOAK_HOME/setLogLevel.xsl -o:$KEYCLOAK_HOME/standalone/configuration/standalone-ha.xml && \
+#    rm $KEYCLOAK_HOME/setLogLevel.xsl
 
-ADD changeDatabase.xsl $KEYCLOAK_HOME
-RUN java -jar /usr/share/java/saxon.jar -s:$KEYCLOAK_HOME/standalone/configuration/standalone.xml -xsl:$KEYCLOAK_HOME/changeDatabase.xsl -o:$KEYCLOAK_HOME/standalone/configuration/standalone.xml && \
-    java -jar /usr/share/java/saxon.jar -s:$KEYCLOAK_HOME/standalone/configuration/standalone-ha.xml -xsl:$KEYCLOAK_HOME/changeDatabase.xsl -o:$KEYCLOAK_HOME/standalone/configuration/standalone-ha.xml && \
-    rm $KEYCLOAK_HOME/changeDatabase.xsl
+#ADD changeDatabase.xsl $KEYCLOAK_HOME
+#RUN java -jar /usr/share/java/saxon.jar -s:$KEYCLOAK_HOME/standalone/configuration/standalone.xml -xsl:$KEYCLOAK_HOME/changeDatabase.xsl -o:$KEYCLOAK_HOME/standalone/configuration/standalone.xml && \
+#    java -jar /usr/share/java/saxon.jar -s:$KEYCLOAK_HOME/standalone/configuration/standalone-ha.xml -xsl:$KEYCLOAK_HOME/changeDatabase.xsl -o:$KEYCLOAK_HOME/standalone/configuration/standalone-ha.xml && \
+#    rm $KEYCLOAK_HOME/changeDatabase.xsl
 
 ENV PSQL_JDBC_VERSION 9.3-1104-jdbc41
 
