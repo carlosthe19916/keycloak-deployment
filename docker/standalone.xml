@@ -82,19 +82,10 @@
     <profile>
         <subsystem xmlns="urn:jboss:domain:logging:3.0">
             <console-handler name="CONSOLE">
-                <level name="INFO"/>
                 <formatter>
                     <named-formatter name="COLOR-PATTERN"/>
                 </formatter>
             </console-handler>
-            <periodic-rotating-file-handler name="FILE" autoflush="true">
-                <formatter>
-                    <named-formatter name="PATTERN"/>
-                </formatter>
-                <file relative-to="jboss.server.log.dir" path="server.log"/>
-                <suffix value=".yyyy-MM-dd"/>
-                <append value="true"/>
-            </periodic-rotating-file-handler>
             <logger category="com.arjuna">
                 <level name="WARN"/>
             </logger>
@@ -104,11 +95,13 @@
             <logger category="sun.rmi">
                 <level name="WARN"/>
             </logger>
+            <logger category="org.keycloak">
+                <level name="${env.KEYCLOAK_LOGLEVEL:INFO}"/>
+            </logger>
             <root-logger>
-                <level name="INFO"/>
+                <level name="${env.ROOT_LOGLEVEL:INFO}"/>
                 <handlers>
                     <handler name="CONSOLE"/>
-                    <handler name="FILE"/>
                 </handlers>
             </root-logger>
             <formatter name="PATTERN">
@@ -215,10 +208,10 @@
         <subsystem xmlns="urn:jboss:domain:infinispan:4.0">
             <cache-container name="keycloak" jndi-name="infinispan/Keycloak">
                 <local-cache name="realms">
-                    <eviction max-entries="10000" strategy="LRU"/>
+                    <eviction strategy="LRU" max-entries="10000"/>
                 </local-cache>
                 <local-cache name="users">
-                    <eviction max-entries="10000" strategy="LRU"/>
+                    <eviction strategy="LRU" max-entries="10000"/>
                 </local-cache>
                 <local-cache name="sessions"/>
                 <local-cache name="authenticationSessions"/>
@@ -228,15 +221,15 @@
                 <local-cache name="loginFailures"/>
                 <local-cache name="work"/>
                 <local-cache name="authorization">
-                    <eviction max-entries="10000" strategy="LRU"/>
+                    <eviction strategy="LRU" max-entries="10000"/>
                 </local-cache>
                 <local-cache name="keys">
-                    <eviction max-entries="1000" strategy="LRU"/>
+                    <eviction strategy="LRU" max-entries="1000"/>
                     <expiration max-idle="3600000"/>
                 </local-cache>
                 <local-cache name="actionTokens">
-                    <eviction max-entries="-1" strategy="NONE"/>
-                    <expiration max-idle="-1" interval="300000"/>
+                    <eviction strategy="NONE" max-entries="-1"/>
+                    <expiration interval="300000" max-idle="-1"/>
                 </local-cache>
             </cache-container>
             <cache-container name="server" default-cache="default" module="org.wildfly.clustering.server">
@@ -465,7 +458,7 @@
         <subsystem xmlns="urn:jboss:domain:undertow:4.0">
             <buffer-cache name="default"/>
             <server name="default-server">
-                <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true"/>
+                <http-listener name="default" socket-binding="http" redirect-socket="https" proxy-address-forwarding="${env.PROXY_ADDRESS_FORWARDING}" enable-http2="true"/>
                 <https-listener name="https" socket-binding="https" security-realm="ApplicationRealm" enable-http2="true"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
@@ -483,12 +476,13 @@
         <subsystem xmlns="urn:jboss:domain:keycloak-server:1.1">
             <web-context>auth</web-context>
             <providers>
-                <provider>classpath:${jboss.home.dir}/providers/*</provider>
+                <provider>
+                    classpath:${jboss.home.dir}/providers/*
+                </provider>
             </providers>
             <master-realm-name>master</master-realm-name>
             <scheduled-task-interval>900</scheduled-task-interval>
             <theme>
-                <welcomeTheme>${env.KEYCLOAK_WELCOME_THEME:keycloak}</welcomeTheme>
                 <staticMaxAge>2592000</staticMaxAge>
                 <cacheThemes>true</cacheThemes>
                 <cacheTemplates>true</cacheTemplates>
