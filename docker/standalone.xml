@@ -43,12 +43,17 @@
                 <authorization>
                     <properties path="application-roles.properties" relative-to="jboss.server.config.dir"/>
                 </authorization>
-            <!-- Added by openshift.io keycloak team -->
                 <server-identities>
                     <ssl>
-                        <keystore path="keycloak.jks" relative-to="jboss.server.config.dir" keystore-password="%%KEYSTORE_PASSWORD%%" />
+                        <keystore path="application.keystore" relative-to="jboss.server.config.dir" keystore-password="password" alias="server" key-password="password" generate-self-signed-certificate-host="localhost"/>
                     </ssl>
                 </server-identities>
+            <!-- Added by openshift.io keycloak team -->
+                <!--<server-identities>-->
+                    <!--<ssl>-->
+                        <!--<keystore path="keycloak.jks" relative-to="jboss.server.config.dir" keystore-password="%%KEYSTORE_PASSWORD%%" />-->
+                    <!--</ssl>-->
+                <!--</server-identities>-->
             </security-realm>
             <!--   xxxxxxxxxxxxxxxxxxxxxxxxx   -->
         </security-realms>
